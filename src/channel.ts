@@ -8,9 +8,12 @@
 import type {
   ChannelOutboundAdapter,
   ChannelPlugin,
+  OpenClawConfig,
 } from "openclaw/plugin-sdk/core";
 import { createChatChannelPlugin } from "openclaw/plugin-sdk/core";
 import { createLazyRuntimeNamedExport } from "openclaw/plugin-sdk/lazy-runtime";
+
+type ReplyToMode = "off" | "first" | "all" | "batched";
 
 import { mutiroMessageActions } from "./actions.js";
 import { mutiroAgentTools } from "./agent-tools.js";
@@ -41,6 +44,23 @@ const outbound: ChannelOutboundAdapter = {
     const runtime = await loadMutiroChannelRuntime();
     return runtime.sendMutiroMedia(ctx);
   },
+};
+
+// Read `channels.mutiro.replyToMode` as an override; otherwise default to
+// `"first"` so the agent's first reply in a turn threads under the inbound
+// message. Mutiro clients render reply-to as a visible quoted pill, so this
+// anchors context nicely in groups without being noisy in DMs. Set
+// `channels.mutiro.replyToMode` to `"off"`, `"all"`, or `"batched"` in the
+// OpenClaw config to override.
+const resolveMutiroReplyToMode = ({ cfg }: { cfg: OpenClawConfig }): ReplyToMode => {
+  const section = (cfg as { channels?: Record<string, unknown> }).channels?.mutiro as
+    | { replyToMode?: unknown }
+    | undefined;
+  const configured = section?.replyToMode;
+  if (configured === "off" || configured === "first" || configured === "all" || configured === "batched") {
+    return configured;
+  }
+  return "first";
 };
 
 export const mutiroPlugin: ChannelPlugin<ResolvedMutiroAccount> = createChatChannelPlugin<
@@ -125,6 +145,45 @@ export const mutiroPlugin: ChannelPlugin<ResolvedMutiroAccount> = createChatChan
         await runtime.stopMutiroAccount(ctx);
       },
     },
+
+    // Status adapter: answers `openclaw channels status mutiro`. The runtime
+    // already updates `running` / `connected` / `lastConnectedAt` /
+    // `reconnectAttempts` via `ctx.setStatus()` when the bridge subprocess
+    // starts, handshakes, exits, or is in backoff. Here we just enrich the
+    // snapshot with Mutiro-specific context (agent workspace path, bridge
+    // mode, derived health string).
+    status: {
+      buildAccountSnapshot: ({ account, runtime }) => {
+        const base = runtime ?? { accountId: account.accountId };
+        const running = base.running ?? false;
+        const connected = base.connected ?? false;
+        const restartPending = base.restartPending ?? false;
+        const healthState = !running
+          ? restartPending
+            ? "restarting"
+            : "stopped"
+          : connected
+            ? "healthy"
+            : "connecting";
+        return {
+          ...base,
+          accountId: account.accountId,
+          configured: account.configured,
+          enabled: account.enabled,
+          mode: "bridge",
+          healthState,
+          dbPath: account.config.agentDir ?? null,
+        };
+      },
+    },
+  },
+  // Threading adapter: Mutiro natively supports `reply_to_message_id`, so wire
+  // OpenClaw's reply-dispatch into it. `allowExplicitReplyTagsWhenOff` keeps
+  // agent-directed reply markers working even when the user has disabled
+  // automatic reply-threading.
+  threading: {
+    resolveReplyToMode: resolveMutiroReplyToMode,
+    allowExplicitReplyTagsWhenOff: true,
   },
   outbound,
 });

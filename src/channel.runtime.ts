@@ -30,6 +30,16 @@ type StartContext = ChannelGatewayContext<ResolvedMutiroAccount>;
 
 const sessions = new Map<string, BridgeSession>();
 
+// Crash-backoff state per account. Repeated crashes escalate the delay so we
+// don't thrash the gateway's restart loop when the host is consistently
+// failing (bad config, missing credential, host crash on boot, etc.). The
+// streak resets when the last crash is older than `CRASH_STREAK_RESET_MS`,
+// so a host that ran healthy for a while then crashed once starts over at
+// the shortest backoff.
+const CRASH_BACKOFF_MS = [1_000, 2_000, 5_000, 15_000, 60_000];
+const CRASH_STREAK_RESET_MS = 5 * 60_000;
+const crashState = new Map<string, { count: number; lastCrashAt: number }>();
+
 const sessionKey = (channel: string, accountId: string) => `${channel}:${accountId}`;
 
 const requireSessionForAccount = (accountId: string | null | undefined): BridgeSession => {
@@ -299,14 +309,55 @@ export const startMutiroAccount = async (ctx: StartContext) => {
       : undefined,
     onHostExit: (code) => {
       sessions.delete(key);
-      ctx.log?.info?.(`mutiro: host (${ctx.accountId}) exited with code ${code}`);
+      const now = Date.now();
+      const isAbort = ctx.abortSignal.aborted;
+      const isCleanExit = code === 0 || isAbort;
+
+      if (isCleanExit) {
+        crashState.delete(ctx.accountId);
+        ctx.log?.info?.(
+          `mutiro: host (${ctx.accountId}) exited with code ${code}${isAbort ? " (abort)" : ""}`,
+        );
+        ctx.setStatus({
+          ...ctx.getStatus(),
+          running: false,
+          connected: false,
+          lastDisconnect: { at: now, status: code ?? undefined },
+        });
+        settleLifecycle();
+        return;
+      }
+
+      // Unexpected exit: track the streak, compute backoff, and hold the
+      // lifecycle promise until the delay elapses. The gateway's restart
+      // loop won't fire until we settle, so this delay is the effective
+      // backoff without touching gateway internals.
+      const prior = crashState.get(ctx.accountId);
+      const streak =
+        prior && now - prior.lastCrashAt < CRASH_STREAK_RESET_MS ? prior.count + 1 : 1;
+      crashState.set(ctx.accountId, { count: streak, lastCrashAt: now });
+
+      const delayMs = CRASH_BACKOFF_MS[Math.min(streak - 1, CRASH_BACKOFF_MS.length - 1)];
+      ctx.log?.warn?.(
+        `mutiro: host (${ctx.accountId}) exited unexpectedly with code ${code}; ` +
+          `restarting in ${Math.round(delayMs / 1000)}s (attempt ${streak})`,
+      );
       ctx.setStatus({
         ...ctx.getStatus(),
         running: false,
         connected: false,
-        lastDisconnect: { at: Date.now(), status: code ?? undefined },
+        restartPending: true,
+        reconnectAttempts: streak,
+        lastDisconnect: {
+          at: now,
+          status: code ?? undefined,
+          error: `exit_code=${code ?? "null"}`,
+        },
       });
-      settleLifecycle();
+
+      setTimeout(() => {
+        settleLifecycle();
+      }, delayMs);
     },
   });
 

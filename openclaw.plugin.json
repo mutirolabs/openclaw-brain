@@ -21,6 +21,11 @@
       "enabled": {
         "type": "boolean"
       },
+      "replyToMode": {
+        "type": "string",
+        "enum": ["off", "first", "all", "batched"],
+        "description": "How the agent's outbound messages thread under the inbound one. Default: \"first\" (quote the inbound on the first agent reply, then free-standing follow-ups)."
+      },
       "accounts": {
         "type": "object",
         "additionalProperties": {
