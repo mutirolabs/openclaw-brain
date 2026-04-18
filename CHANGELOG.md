@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-04-18
+
 ### Added
 
 - README prerequisites and wizard help text now suggest `--badge lobster` on
@@ -53,5 +55,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   with concrete fix commands, plus the paste-into-AI prompt as an alternative
   for users who'd rather have their AI assistant drive the setup.
 
-[Unreleased]: https://github.com/mutirolabs/openclaw-brain/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/mutirolabs/openclaw-brain/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/mutirolabs/openclaw-brain/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/mutirolabs/openclaw-brain/releases/tag/v0.1.0

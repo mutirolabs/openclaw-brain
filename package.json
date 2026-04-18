@@ -1,6 +1,6 @@
 {
   "name": "@mutirolabs/openclaw-brain",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "OpenClaw channel plugin that drives a Mutiro agent over chatbridge. OpenClaw becomes the brain; Mutiro stays the messaging surface.",
   "type": "module",
   "license": "ISC",
