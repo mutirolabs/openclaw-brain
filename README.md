@@ -44,14 +44,13 @@ mutiro user message send <agent-username> "Hello! Who are you?"
 
 ## Enable Mutiro-native tools
 
-To let your OpenClaw agent send voice messages, interactive cards, or forward messages through Mutiro, add `mutiro*` to your agent's `tools.alsoAllow`:
+Let your OpenClaw agent send voice messages, interactive cards, and forward messages through Mutiro by allowing the `mutiro*` tools:
 
-```yaml
-tools:
-  profile: messaging
-  alsoAllow:
-    - "mutiro*"
+```bash
+openclaw config set tools.alsoAllow '["mutiro*"]'
 ```
+
+If you already curate `tools.alsoAllow`, merge `"mutiro*"` into your existing list instead of overwriting — the command above replaces the array.
 
 ## Access control, enforced at the edge
 
