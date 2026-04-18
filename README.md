@@ -10,16 +10,6 @@ OpenClaw handles the cognition. Mutiro handles the messaging surface, identity, 
 
 Sovereign intelligence deserves a professional interface. Hiding a powerful OpenClaw brain behind a generic Telegram bot or a clunky webview breaks the user experience and obscures ownership. This extension implements an OpenClaw Channel that connects your agent to Mutiro's native clients (Desktop, Mobile, Web, CLI), enforcing the `by @owner` accountability standard out of the box.
 
-## Prerequisites
-
-You need a Mutiro agent. If you don't have one yet, the fastest path is to let your AI assistant walk you through it — paste this prompt into Claude, Cursor, or Windsurf:
-
-> Read https://mutiro.com/docs/guides/create-agent.md and help me create a Mutiro agent step by step. Use `--badge lobster` on `mutiro agents create` so the agent shows the OpenClaw badge.
-
-Prefer to do it yourself? Follow the [Mutiro create-agent guide](https://www.mutiro.com/docs/guides/create-agent.md). Already have an agent but missing the badge? Flip it with `mutiro agents update-profile <agent-username> --badge lobster`.
-
-The setup wizard in step 2 below sanity-checks your agent and warns if the built-in brain is still running — you don't need to run those checks yourself first.
-
 ## Quick Start
 
 Install the Mutiro channel using OpenClaw's native extension manager:
@@ -76,6 +66,30 @@ mutiro agents deny <agent-username> <username>
 ```
 
 As adoption grows, we may expose the allowlist directly through the OpenClaw channel. For now it stays behind the `mutiro` CLI — a deliberate boundary that keeps access control outside the agent sandbox.
+
+## FAQ
+
+**How do I show the OpenClaw badge on my agent?**
+
+Pass `--badge lobster` when creating the agent so every Mutiro client renders the lobster next to the avatar:
+
+```bash
+mutiro agents create <username> "<Display>" --engine genie --badge lobster
+```
+
+For an agent that already exists, flip the badge on with:
+
+```bash
+mutiro agents update-profile <agent-username> --badge lobster
+```
+
+**I don't have a Mutiro agent yet — what's the fastest way to create one?**
+
+Paste this prompt into your AI assistant (Claude, Cursor, Windsurf, …):
+
+> Read https://mutiro.com/docs/guides/create-agent.md and help me create a Mutiro agent step by step. Use `--badge lobster` on `mutiro agents create` so the agent shows the OpenClaw badge.
+
+Or follow the [Mutiro create-agent guide](https://www.mutiro.com/docs/guides/create-agent.md) by hand.
 
 ## Resources
 
