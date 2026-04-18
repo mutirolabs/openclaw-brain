@@ -1,9 +1,6 @@
 {
   "id": "mutiro",
   "channels": ["mutiro"],
-  "channelEnvVars": {
-    "mutiro": ["MUTIRO_AGENT_API_KEY"]
-  },
   "configSchema": {
     "type": "object",
     "additionalProperties": false,

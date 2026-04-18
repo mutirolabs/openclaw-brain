@@ -225,25 +225,53 @@ export const mutiroSetupWizard: ChannelSetupWizard = {
     const dir = resolveMutiroAccount(cfg, accountId).config.agentDir;
     if (!dir) return undefined;
 
+    const issues: string[] = [];
+
     const whoami = await runPluginCommandWithTimeout({
       argv: ["mutiro", "auth", "whoami"],
       timeoutMs: 5_000,
       cwd: dir,
     });
-
     if (whoami.code !== 0) {
-      await prompter.note(
+      issues.push(
         [
-          "Could not confirm `mutiro auth whoami`.",
-          "",
-          "Finish Mutiro-side setup before starting the gateway:",
+          "Mutiro auth not confirmed. Log in before starting the gateway:",
           `  cd ${dir}`,
           "  mutiro auth login <email>",
-          "",
-          "Also make sure the built-in Mutiro brain is NOT running for this agent —",
-          "running two brains at once will fight over the same conversations:",
-          "  mutiro agent doctor",
         ].join("\n"),
+      );
+    }
+
+    // Built-in brain check: `mutiro agent host status` exits 0 when a host
+    // process is already running for this agent. Starting OpenClaw's gateway
+    // on top of a running host would put two brains on one agent and make
+    // them race on every turn. `host doctor` (setup validation) is separate
+    // from `host status` (runtime liveness) — we want the latter here.
+    const hostStatus = await runPluginCommandWithTimeout({
+      argv: ["mutiro", "agent", "host", "status"],
+      timeoutMs: 5_000,
+      cwd: dir,
+    });
+    if (hostStatus.code === 0) {
+      issues.push(
+        [
+          "A Mutiro agent host is already running for this agent.",
+          "Stop it before starting OpenClaw — two brains on one agent will",
+          "race on every turn:",
+          "  pkill -f 'mutiro agent host'   # or stop whichever process started it",
+        ].join("\n"),
+      );
+    }
+
+    if (issues.length > 0) {
+      await prompter.note(
+        [
+          "Readiness checks flagged the following:",
+          "",
+          ...issues.flatMap((issue) => [issue, ""]),
+        ]
+          .join("\n")
+          .trimEnd(),
         "Mutiro agent readiness",
       );
     }

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# Convenience launcher that mirrors pi-brain/run-brain.sh but boots OpenClaw's
-# gateway against a Mutiro agent directory instead of a standalone brain.
+# Convenience launcher: points OpenClaw's gateway at a Mutiro agent directory
+# and runs it. Equivalent to setting channels.mutiro.accounts.default.agentDir
+# manually and then running `openclaw gateway run`.
 #
 # Usage: ./run-brain.sh /path/to/agent-directory
 set -euo pipefail

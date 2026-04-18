@@ -1,6 +1,6 @@
 // NDJSON protocol constants used by the Mutiro chatbridge envelope.
-// Ported verbatim from pi-brain/mutiro-pi-bridge.ts so that behavior matches
-// the reference adapter envelope-for-envelope.
+// These type URLs and helpers mirror the Mutiro bridge's protobuf surface
+// envelope-for-envelope.
 
 export const PROTOCOL_VERSION = "mutiro.agent.bridge.v1";
 

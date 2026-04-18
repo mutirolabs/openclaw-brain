@@ -1,7 +1,7 @@
 // Long-lived bridge session: owns the subprocess, performs the handshake,
 // dispatches inbound envelopes, and keeps a narrow per-conversation cache for
-// `session.snapshot`. Ported from pi-brain's `main()` but restructured so the
-// OpenClaw plugin runtime can start/stop it per configured account.
+// `session.snapshot`. Structured so the OpenClaw plugin runtime can
+// start/stop one session per configured Mutiro account.
 
 import type { ChildProcessWithoutNullStreams } from "node:child_process";
 

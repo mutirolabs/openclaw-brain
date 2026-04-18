@@ -1,8 +1,7 @@
 // Outbound adapter that translates OpenClaw reply-dispatch calls into
-// bridge-local commands. Mirrors pi-brain's tool surface (send_message,
-// send_voice_message, send_card, react_to_message, send_file_message,
-// forward_message, recall, recall_get) but reshaped so OpenClaw's
-// ChannelOutboundAdapter is the consumer instead of a Pi tool runtime.
+// bridge-local commands: send_message, send_voice_message, send_card,
+// react_to_message, send_file_message, forward_message, recall,
+// recall_get. Shaped around OpenClaw's ChannelOutboundAdapter contract.
 
 import * as path from "node:path";
 
@@ -112,9 +111,8 @@ const buildCardJson = (
 
   return {
     // Field names must match Mutiro's CardPart protobuf schema (see
-    // spec/protobuf/shared/messaging.proto). pi-brain uses stale names
-    // (`json_data` / `version`) which the host's strict JSON-to-proto
-    // decoder rejects as unknown fields.
+    // spec/protobuf/shared/messaging.proto). The host's strict JSON-to-proto
+    // decoder rejects unknown field names like `json_data` / `version`.
     a2ui_json: lines.join("\n"),
     schema_version: "0.8",
     card_id: cardId || `openclaw-card-${Math.random().toString(36).slice(2, 10)}`,

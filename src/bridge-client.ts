@@ -1,6 +1,5 @@
 // NDJSON envelope codec + subprocess manager for the Mutiro chatbridge.
-// Ported from pi-brain's `createHostProcess` and `createBridgeClient`, kept
-// transport-shaped so the rest of the plugin can treat the bridge as a
+// Kept transport-shaped so the rest of the plugin can treat the bridge as a
 // request/response channel regardless of which brain is on the other side.
 
 import { spawn, type ChildProcessWithoutNullStreams } from "node:child_process";

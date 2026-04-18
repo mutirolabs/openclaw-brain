@@ -1,7 +1,7 @@
 // Channel-owned agent tools. Exposed to OpenClaw's agent loop via
-// `ChannelPlugin.agentTools`. The first one mirrors pi-brain's
-// `send_voice_message`: a text-to-speech voice message delivered through the
-// bridge's `message.send_voice` command (host-side TTS, not client-side).
+// `ChannelPlugin.agentTools`. The first one is a text-to-speech voice
+// message delivered through the bridge's `message.send_voice` command
+// (host-side TTS, not client-side).
 
 import { Type } from "@sinclair/typebox";
 import type { ChannelAgentTool } from "openclaw/plugin-sdk/channel-contract";

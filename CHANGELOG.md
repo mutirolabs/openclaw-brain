@@ -21,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Initial OpenClaw channel plugin for the Mutiro `chatbridge` protocol.
-- NDJSON envelope codec ported from `pi-brain`.
+- NDJSON envelope codec for `mutiro.agent.bridge.v1`.
 - Subprocess lifecycle for `mutiro agent host --mode=bridge`, one per configured account.
 - Inbound pipeline: `message.observed` → OpenClaw reply dispatch.
 - Outbound surface: `message.send`, `message.send_voice`, `message.react`,

@@ -1,5 +1,5 @@
-// Message normalization helpers ported from pi-brain/mutiro-pi-bridge.ts.
-// The host delivers `envelope.payload.message` as a pre-normalized bag of parts;
+// Message normalization helpers for inbound bridge envelopes. The host
+// delivers `envelope.payload.message` as a pre-normalized bag of parts;
 // these helpers turn that into plain text for the brain and into structured
 // ObservedTurn records for downstream dispatch.
 
