@@ -12,20 +12,13 @@ Sovereign intelligence deserves a professional interface. Hiding a powerful Open
 
 ## Prerequisites
 
-You need a Mutiro agent before installing the channel. Confirm each check below:
+You need a Mutiro agent. If you don't have one yet, the fastest path is to let your AI assistant walk you through it — paste this prompt into Claude, Cursor, or Windsurf:
 
-| Check | Fix if it fails |
-|-------|-----------------|
-| `mutiro version` prints a version | `curl -sSL https://mutiro.com/downloads/install.sh \| bash` |
-| `mutiro auth whoami` prints your username | `mutiro auth signup <email> <username> "<Display Name>"` |
-| `mutiro agents list` shows an agent you own | `mutiro agents create <username> "<Display>" --engine genie --badge lobster` |
-| `mutiro agent host status` reports no running host | Stop whichever process started the host — two brains on one agent will race on every turn |
+> Read https://mutiro.com/docs/guides/create-agent.md and help me create a Mutiro agent step by step. Use `--badge lobster` on `mutiro agents create` so the agent shows the OpenClaw badge.
 
-Pass `--badge lobster` when creating the agent to mark it as OpenClaw-powered in every Mutiro client. For an existing agent: `mutiro agents update-profile <agent-username> --badge lobster`.
+Prefer to do it yourself? Follow the [Mutiro create-agent guide](https://www.mutiro.com/docs/guides/create-agent.md). Already have an agent but missing the badge? Flip it with `mutiro agents update-profile <agent-username> --badge lobster`.
 
-New to Mutiro? Follow the [create-agent guide](https://www.mutiro.com/docs/guides/create-agent.md), or paste this into your AI assistant:
-
-> Read https://mutiro.com/docs/guides/create-agent.md and help me create an agent step by step.
+The setup wizard in step 2 below sanity-checks your agent and warns if the built-in brain is still running — you don't need to run those checks yourself first.
 
 ## Quick Start
 
