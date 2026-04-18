@@ -96,3 +96,4 @@ Or follow the [Mutiro create-agent guide](https://www.mutiro.com/docs/guides/cre
 - [Manage the Mutiro allowlist](./docs/guides/manage-allowlist.md)
 - [Mutiro documentation](https://mutiro.com/docs)
 - [OpenClaw documentation](https://openclaw.ai)
+- Sibling repo: [`pi-brain`](https://github.com/mutirolabs/pi-brain) — the Pi equivalent, a standalone bridge rather than an OpenClaw extension
