@@ -14,7 +14,11 @@
   },
   "scripts": {
     "check": "tsc -p tsconfig.json --noEmit",
-    "gateway": "openclaw gateway run"
+    "gateway": "openclaw gateway run",
+    "prepublishOnly": "npm run check"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "keywords": [
     "mutiro",
