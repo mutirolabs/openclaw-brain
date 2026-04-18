@@ -1,5 +1,7 @@
-// Setup wizard + adapter driven by `openclaw channels add --channel mutiro`
-// (and the interactive onboarding flow). The wizard detects the `mutiro` CLI,
+// Setup wizard + adapter. The wizard runs when the user invokes `openclaw
+// channels add` with no flags and picks `mutiro` from the selection list
+// (passing `--channel mutiro` falls through to the non-interactive adapter
+// path, not the wizard). The wizard detects the `mutiro` CLI,
 // collects the agent directory path, validates that it looks like a real
 // Mutiro agent workspace, and checks that auth is configured before writing
 // `channels.mutiro.accounts.<id>.agentDir` into the OpenClaw config.

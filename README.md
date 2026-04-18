@@ -41,13 +41,14 @@ openclaw plugins install --dangerously-force-unsafe-install "file:$(pwd)"
 
 ### 3. Configure the channel
 
-The plugin ships a setup wizard. Run:
+The plugin ships a setup wizard. Run the bare command (no `--channel` flag —
+passing one skips the wizard and falls through to the non-interactive adapter):
 
 ```bash
-openclaw channels add --channel mutiro
+openclaw channels add
 ```
 
-It will:
+Pick `mutiro` from the list. The wizard will:
 
 - detect the `mutiro` CLI (and point you at the install command if missing)
 - ask for your Mutiro agent directory (the folder containing `.mutiro-agent.yaml`)
@@ -138,7 +139,7 @@ A small reference package showing how to plug OpenClaw into Mutiro `chatbridge` 
 - `src/outbound.ts` — OpenClaw outbound adapter → `message.send` / `message.react` / `message.forward`
 - `src/channel.ts` — Mutiro channel plugin definition
 - `src/channel.runtime.ts` — runtime barrel consumed by the plugin entry
-- `src/setup-surface.ts` — setup wizard driven by `openclaw channels add --channel mutiro`
+- `src/setup-surface.ts` — setup wizard driven by `openclaw channels add` (pick `mutiro` from the list)
 - `src/agent-tools.ts` — `mutiro_send_voice_message`, `mutiro_send_card`, `mutiro_forward_message`
 - `src/signal-forwarder.ts` — OpenClaw tool events → Mutiro `signal.emit` (26-entry map)
 - `src/live-snapshot.ts` — `session.snapshot` + `task.request` handlers for live call handoff

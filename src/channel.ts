@@ -69,9 +69,10 @@ export const mutiroPlugin: ChannelPlugin<ResolvedMutiroAccount> = createChatChan
     agentTools: mutiroAgentTools,
     actions: mutiroMessageActions,
 
-    // Setup surfaces: `setup` handles non-interactive `openclaw channels add --channel mutiro`
-    // with flags; `setupWizard` drives the interactive wizard shown during onboarding
-    // and `openclaw channels add` without flags.
+    // Setup surfaces: `setup` is the non-interactive adapter path
+    // (`openclaw channels add --channel mutiro [flags]`); `setupWizard` is what
+    // runs when the user invokes `openclaw channels add` with no flags and
+    // picks `mutiro` from the selection list.
     setup: mutiroSetupAdapter,
     setupWizard: mutiroSetupWizard,
 

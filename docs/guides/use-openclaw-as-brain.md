@@ -126,7 +126,20 @@ openclaw channels list | grep -i mutiro
 
 ### Step 5: Point OpenClaw at the Mutiro Agent Directory
 
-Use the single-account shorthand if I only have one Mutiro agent:
+**Preferred — interactive wizard.** Run the bare `channels add` command (no
+`--channel` flag; passing one skips the wizard and falls through to the
+non-interactive adapter):
+
+```bash
+openclaw channels add
+```
+
+Pick `mutiro` from the list. The wizard detects the `mutiro` CLI, asks for
+the agent directory, validates it, runs `mutiro auth whoami`, and writes the
+config.
+
+**Non-interactive alternative.** Use the single-account shorthand if I only
+have one Mutiro agent:
 
 ```bash
 openclaw config set channels.mutiro.accounts.default.agentDir /absolute/path/to/agent-directory

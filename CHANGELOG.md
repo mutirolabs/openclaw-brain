@@ -22,9 +22,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Agent tools: `mutiro_send_voice_message`, `mutiro_send_card`, `mutiro_forward_message`.
 - Signal forwarder: 26-entry OpenClaw-tool → Mutiro signal-enum map with
   rich intent labels from `onItemEvent`.
-- Channel setup wizard (`openclaw channels add --channel mutiro`): detects the
-  Mutiro CLI, validates the agent directory, runs `mutiro auth whoami`, and
-  writes `channels.mutiro.accounts.<id>.agentDir`.
+- Channel setup wizard: detects the Mutiro CLI, validates the agent directory,
+  runs `mutiro auth whoami`, and writes `channels.mutiro.accounts.<id>.agentDir`.
+  Launched via `openclaw channels add` (no flags — passing `--channel mutiro`
+  falls through to the non-interactive adapter and never reaches the wizard).
 - Host stderr (slog JSON) wrapped into the OpenClaw channel logger so log
   output matches the rest of the gateway stream.
 - `docs/guides/use-openclaw-as-brain.md` — end-to-end setup walkthrough.
