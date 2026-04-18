@@ -41,6 +41,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `npm install --omit=dev` in the installed plugin directory picks it up;
   without this, plugin registration fails with "Cannot find module
   '@sinclair/typebox'" when loading `src/agent-tools.ts`.
+- README Prerequisites section: checklist of Mutiro-side state the plugin
+  requires (CLI installed, signed in, agent created, built-in brain stopped)
+  with concrete fix commands, plus the paste-into-AI prompt as an alternative
+  for users who'd rather have their AI assistant drive the setup.
 
 [Unreleased]: https://github.com/mutirolabs/openclaw-brain/compare/v0.1.0...HEAD
 [0.1.0]: https://github.com/mutirolabs/openclaw-brain/releases/tag/v0.1.0

@@ -4,17 +4,35 @@ Use this repo if you want to plug [OpenClaw](https://openclaw.ai) into a Mutiro 
 
 This is the OpenClaw-shaped sibling of [`../pi-brain`](../pi-brain). The bridge codec is a faithful port of `mutiro-pi-bridge.ts`; the brain side is structured as an OpenClaw third-party channel plugin instead of a one-off standalone adapter.
 
-## Quick Start
+## Prerequisites
 
-### 1. Create a Mutiro agent
+This plugin assumes you already have a working Mutiro agent. Before the Quick
+Start below, confirm each of these passes:
+
+| Check | Fix if it fails |
+|-------|-----------------|
+| `mutiro version` prints a version | `curl -sSL https://mutiro.com/downloads/install.sh \| bash` |
+| `mutiro auth whoami` prints your username | sign up: `mutiro auth signup <email> <username> "<Display Name>"` — or log in: `mutiro auth login <email>` |
+| `mutiro agents list` shows at least one agent you own | `mutiro agents create <username> "<Display>" --engine genie --bio "<short bio>"` |
+| The built-in Mutiro brain for that agent is **not** running | `mutiro agent doctor`, and stop any `mutiro agent run` / `mutiro start` process for that agent |
+
+Want an AI assistant to drive you through those steps instead? Paste this into
+Claude, Cursor, or Windsurf:
 
 ```text
 Read this page from the Mutiro docs: https://mutiro.com/docs/guides/create-agent.md and help me create an agent step by step.
 ```
 
-Stop the built-in Mutiro brain for that agent before you run this bridge. Do not run both at the same time.
+Canonical reference: [Mutiro create-agent guide](https://www.mutiro.com/docs/guides/create-agent.md).
 
-### 2. Install this plugin into OpenClaw
+> **Two brains, one agent = trouble.** Mutiro ships its own built-in brain. If
+> you leave it running, it will race OpenClaw for the same conversations and
+> both will reply (or neither will, depending on ordering). Stop it before
+> starting the OpenClaw gateway.
+
+## Quick Start
+
+### 1. Install this plugin into OpenClaw
 
 ```bash
 openclaw plugins install --dangerously-force-unsafe-install @mutirolabs/openclaw-brain
@@ -39,7 +57,7 @@ openclaw plugins install --dangerously-force-unsafe-install "file:$(pwd)"
 > `spawn` call at [`src/bridge-client.ts`](./src/bridge-client.ts) if you want
 > to see exactly what the plugin executes.
 
-### 3. Configure the channel
+### 2. Configure the channel
 
 The plugin ships a setup wizard. Run the bare command (no `--channel` flag —
 passing one skips the wizard and falls through to the non-interactive adapter):
@@ -61,7 +79,7 @@ Or set the config manually:
 openclaw config set channels.mutiro.accounts.default.agentDir /path/to/agent-directory
 ```
 
-### 4. Run the OpenClaw gateway
+### 3. Run the OpenClaw gateway
 
 ```bash
 openclaw gateway run
@@ -73,7 +91,7 @@ Or use the shortcut:
 ./run-brain.sh /path/to/agent-directory
 ```
 
-### 5. Talk to your agent
+### 4. Talk to your agent
 
 Once the gateway is running, your agent is reachable from any Mutiro surface:
 
@@ -88,7 +106,7 @@ For a quick shell smoke test:
 mutiro user message send <agent-username> "Hello! Who are you?"
 ```
 
-### 6. Allow Mutiro-specific agent tools
+### 5. Allow Mutiro-specific agent tools
 
 To let the OpenClaw agent send voice messages, interactive cards, or forward
 messages through Mutiro, add `mutiro*` to your agent's `tools.alsoAllow`:
@@ -103,7 +121,7 @@ tools:
 See [`docs/guides/use-openclaw-as-brain.md`](./docs/guides/use-openclaw-as-brain.md)
 for a full walkthrough.
 
-### 7. Share the agent with other users
+### 6. Share the agent with other users
 
 Mutiro has a **server-side allowlist** that's separate from OpenClaw's own
 `allowFrom`. Denied users are blocked at the Mutiro server — their messages
