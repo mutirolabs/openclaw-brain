@@ -60,7 +60,22 @@ Or use the shortcut:
 ./run-brain.sh /path/to/agent-directory
 ```
 
-### 5. Allow Mutiro-specific agent tools
+### 5. Talk to your agent
+
+Once the gateway is running, your agent is reachable from any Mutiro surface:
+
+- **Web app:** [https://app.mutiro.com](https://app.mutiro.com)
+- **CLI chat:** `mutiro chat`
+- **Mobile:** Mutiro app on iOS / Android
+- **Desktop:** Mutiro desktop app on macOS / Windows / Linux
+
+For a quick shell smoke test:
+
+```bash
+mutiro user message send <agent-username> "Hello! Who are you?"
+```
+
+### 6. Allow Mutiro-specific agent tools
 
 To let the OpenClaw agent send voice messages, interactive cards, or forward
 messages through Mutiro, add `mutiro*` to your agent's `tools.alsoAllow`:
@@ -75,7 +90,7 @@ tools:
 See [`docs/guides/use-openclaw-as-brain.md`](./docs/guides/use-openclaw-as-brain.md)
 for a full walkthrough.
 
-### 6. Share the agent with other users
+### 7. Share the agent with other users
 
 Mutiro has a **server-side allowlist** that's separate from OpenClaw's own
 `allowFrom`. Denied users are blocked at the Mutiro server — their messages

@@ -259,13 +259,18 @@ OpenClaw runs from its built output — dirty-tree detection only looks at `.ts`
 
 ### Step 10: Test It
 
-Send a message to the agent from any Mutiro surface:
+Talk to the agent from any Mutiro surface:
+
+- **Web app:** https://app.mutiro.com — sign in and open the conversation with the agent
+- **CLI chat:** `mutiro chat` — terminal UI
+- **Mobile:** Mutiro app on iOS and Android
+- **Desktop:** Mutiro desktop app on macOS, Windows, Linux
+
+Or send a quick test message from the shell:
 
 ```bash
 mutiro user message send <agent-username> "Hello! Who are you?"
 ```
-
-Or use the Mutiro web app, CLI chat (`mutiro chat`), mobile, or desktop.
 
 Within a second or two I should see:
 
