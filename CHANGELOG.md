@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- README prerequisites and wizard help text now suggest `--badge lobster` on
+  `mutiro agents create` so the agent shows the OpenClaw lobster badge in the
+  Mutiro UI. For existing agents, `mutiro agents update-profile <username>
+  --badge lobster` flips it on after the fact.
+
 ## [0.1.0] - 2026-04-18
 
 ### Added

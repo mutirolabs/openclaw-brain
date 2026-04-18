@@ -183,7 +183,7 @@ export const mutiroSetupWizard: ChannelSetupWizard = {
         "",
         "Then log in and create (or pick) an agent:",
         "  mutiro auth login <email>",
-        '  mutiro agents create <username> "<Display Name>" --engine genie --bio "<bio>"',
+        '  mutiro agents create <username> "<Display Name>" --engine genie --bio "<bio>" --badge lobster',
         "",
         `Guide: ${CREATE_AGENT_GUIDE}`,
       ].join("\n"),
@@ -204,7 +204,7 @@ export const mutiroSetupWizard: ChannelSetupWizard = {
         "should drive. Each configured account points to one agent directory.",
         "",
         "If you don't have one yet:",
-        '  mutiro agents create <username> "<Display Name>" --engine genie --bio "<bio>"',
+        '  mutiro agents create <username> "<Display Name>" --engine genie --bio "<bio>" --badge lobster',
         `Guide: ${CREATE_AGENT_GUIDE}`,
       ],
       currentValue: ({ cfg, accountId }) =>
