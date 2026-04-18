@@ -88,10 +88,10 @@ openclaw doctor
 
 This plugin is the piece that lets OpenClaw speak Mutiro's `chatbridge`. It spawns `mutiro agent host --mode=bridge` as a subprocess and translates NDJSON envelopes into OpenClaw inbound messages and outbound send/react/forward/voice/card/forward calls.
 
-Install from the published package (once published):
+Install from the published package:
 
 ```bash
-openclaw plugins install @mutirolabs/openclaw-brain
+openclaw plugins install --dangerously-force-unsafe-install @mutirolabs/openclaw-brain
 ```
 
 Or clone and install from source while iterating:
@@ -99,9 +99,21 @@ Or clone and install from source while iterating:
 ```bash
 git clone https://github.com/mutirolabs/openclaw-brain ~/src/openclaw-brain
 cd ~/src/openclaw-brain
-npm install
-openclaw plugins install "file:$(pwd)"
+# Skip node_modules — OpenClaw's install scanner walks the source tree and
+# caps at 10k directories. Run `npm install` again later if you want local
+# typecheck.
+openclaw plugins install --dangerously-force-unsafe-install "file:$(pwd)"
 ```
+
+**About `--dangerously-force-unsafe-install`**: this plugin legitimately
+spawns `mutiro agent host --mode=bridge` as a subprocess — that is the
+entire `chatbridge` adapter. OpenClaw's install scanner correctly flags any
+plugin that uses `child_process` as sensitive and requires this flag as an
+explicit acknowledgement. Before you pass it, confirm you are installing
+from the signed [`mutirolabs/openclaw-brain`](https://github.com/mutirolabs/openclaw-brain)
+source (or the `@mutirolabs/openclaw-brain` npm package). Review the
+`spawn` call at [`src/bridge-client.ts`](https://github.com/mutirolabs/openclaw-brain/blob/main/src/bridge-client.ts)
+if you want to see exactly what the plugin executes.
 
 Verify OpenClaw sees the channel:
 

@@ -17,15 +17,27 @@ Stop the built-in Mutiro brain for that agent before you run this bridge. Do not
 ### 2. Install this plugin into OpenClaw
 
 ```bash
-openclaw plugins install @mutirolabs/openclaw-brain
+openclaw plugins install --dangerously-force-unsafe-install @mutirolabs/openclaw-brain
 ```
 
 Or, for local development:
 
 ```bash
-npm install
-openclaw plugins install "file:$(pwd)"
+# Skip node_modules if you've run `npm install` here — the install scanner
+# walks the source tree and caps at 10k directories.
+rm -rf node_modules
+openclaw plugins install --dangerously-force-unsafe-install "file:$(pwd)"
 ```
+
+> **Why the `--dangerously-force-unsafe-install` flag?**
+> This plugin legitimately spawns `mutiro agent host --mode=bridge` as a
+> subprocess — that is the entire point of the `chatbridge` adapter. OpenClaw's
+> install scanner correctly flags any plugin that uses `child_process` as
+> sensitive, and requires this flag as an explicit acknowledgement. Before you
+> pass it, **confirm you are installing from the signed [mutirolabs/openclaw-brain](https://github.com/mutirolabs/openclaw-brain)
+> source** (or the `@mutirolabs/openclaw-brain` npm package). Review the
+> `spawn` call at [`src/bridge-client.ts`](./src/bridge-client.ts) if you want
+> to see exactly what the plugin executes.
 
 ### 3. Configure the channel
 
