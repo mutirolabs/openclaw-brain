@@ -1,0 +1,72 @@
+{
+  "name": "@mutirolabs/openclaw-brain",
+  "version": "0.1.0",
+  "description": "OpenClaw channel plugin that drives a Mutiro agent over chatbridge. OpenClaw becomes the brain; Mutiro stays the messaging surface.",
+  "type": "module",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mutirolabs/openclaw-brain.git"
+  },
+  "homepage": "https://github.com/mutirolabs/openclaw-brain#readme",
+  "bugs": {
+    "url": "https://github.com/mutirolabs/openclaw-brain/issues"
+  },
+  "scripts": {
+    "check": "tsc -p tsconfig.json --noEmit",
+    "gateway": "openclaw gateway run"
+  },
+  "keywords": [
+    "mutiro",
+    "chatbridge",
+    "openclaw",
+    "channel",
+    "plugin",
+    "agent"
+  ],
+  "files": [
+    "index.ts",
+    "src",
+    "docs",
+    "openclaw.plugin.json",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "peerDependencies": {
+    "openclaw": ">=2026.4.10"
+  },
+  "peerDependenciesMeta": {
+    "openclaw": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "openclaw": "^2026.4.15",
+    "typescript": "^5.6.0"
+  },
+  "openclaw": {
+    "extensions": [
+      "./index.ts"
+    ],
+    "channel": {
+      "id": "mutiro",
+      "label": "Mutiro",
+      "selectionLabel": "Mutiro (plugin)",
+      "docsPath": "/channels/mutiro",
+      "docsLabel": "mutiro",
+      "blurb": "chatbridge channel; configure a Mutiro agent directory to enable.",
+      "order": 80,
+      "quickstartAllowFrom": true
+    },
+    "install": {
+      "npmSpec": "@mutirolabs/openclaw-brain",
+      "defaultChoice": "npm",
+      "minHostVersion": ">=2026.4.10"
+    }
+  }
+}

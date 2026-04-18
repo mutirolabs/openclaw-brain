@@ -1,0 +1,47 @@
+{
+  "id": "mutiro",
+  "channels": ["mutiro"],
+  "channelEnvVars": {
+    "mutiro": ["MUTIRO_AGENT_API_KEY"]
+  },
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "agentDir": {
+        "type": "string",
+        "description": "Single-account shortcut: absolute path to the Mutiro agent workspace."
+      },
+      "clientName": {
+        "type": "string",
+        "description": "Identifier sent to the host in session.initialize."
+      },
+      "requestedOptionalCapabilities": {
+        "type": "array",
+        "items": { "type": "string" },
+        "description": "Optional capabilities advertised in session.initialize."
+      },
+      "enabled": {
+        "type": "boolean"
+      },
+      "accounts": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["agentDir"],
+          "properties": {
+            "agentDir": { "type": "string" },
+            "clientName": { "type": "string" },
+            "requestedOptionalCapabilities": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "enabled": { "type": "boolean" },
+            "name": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}

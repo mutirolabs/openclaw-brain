@@ -1,0 +1,129 @@
+// OpenClaw channel plugin definition. This file is the "hot" import path
+// loaded during gateway startup and plugin discovery, so it stays narrow:
+// manifest metadata plus a lazy handle into the heavier runtime module.
+//
+// The runtime (`channel.runtime.ts`) owns subprocess lifecycle, envelope
+// dispatch, and the per-account bridge session registry.
+
+import type {
+  ChannelOutboundAdapter,
+  ChannelPlugin,
+} from "openclaw/plugin-sdk/core";
+import { createChatChannelPlugin } from "openclaw/plugin-sdk/core";
+import { createLazyRuntimeNamedExport } from "openclaw/plugin-sdk/lazy-runtime";
+
+import { mutiroMessageActions } from "./actions.js";
+import { mutiroAgentTools } from "./agent-tools.js";
+import { mutiroConfigAdapter, type ResolvedMutiroAccount } from "./config.js";
+import { mutiroSetupAdapter, mutiroSetupWizard } from "./setup-surface.js";
+
+const loadMutiroChannelRuntime = createLazyRuntimeNamedExport(
+  () => import("./channel.runtime.js"),
+  "mutiroChannelRuntime",
+);
+
+const outbound: ChannelOutboundAdapter = {
+  deliveryMode: "direct",
+
+  // `sendText` is called whenever OpenClaw wants to push a text reply into a
+  // Mutiro conversation. The `accountId` selects which active bridge session
+  // to route through; `to` is the Mutiro `conversation_id`; `replyToId` is the
+  // message the reply threads under.
+  async sendText(ctx) {
+    const runtime = await loadMutiroChannelRuntime();
+    return runtime.sendMutiroText(ctx);
+  },
+
+  // `sendMedia` is the single-shot media path. The channel runtime uses the
+  // bridge-local `media.upload` command to stage the file, then attaches it
+  // to a `message.send`.
+  async sendMedia(ctx) {
+    const runtime = await loadMutiroChannelRuntime();
+    return runtime.sendMutiroMedia(ctx);
+  },
+};
+
+export const mutiroPlugin: ChannelPlugin<ResolvedMutiroAccount> = createChatChannelPlugin<
+  ResolvedMutiroAccount
+>({
+  base: {
+    id: "mutiro",
+    meta: {
+      id: "mutiro",
+      label: "Mutiro",
+      selectionLabel: "Mutiro (plugin)",
+      docsPath: "/channels/mutiro",
+      docsLabel: "mutiro",
+      blurb: "chatbridge channel; configure a Mutiro agent directory to enable.",
+      order: 80,
+      quickstartAllowFrom: true,
+      markdownCapable: true,
+    },
+    capabilities: {
+      chatTypes: ["direct", "group"],
+      reactions: true,
+      reply: true,
+      media: true,
+    },
+    config: mutiroConfigAdapter,
+    agentTools: mutiroAgentTools,
+    actions: mutiroMessageActions,
+
+    // Setup surfaces: `setup` handles non-interactive `openclaw channels add --channel mutiro`
+    // with flags; `setupWizard` drives the interactive wizard shown during onboarding
+    // and `openclaw channels add` without flags.
+    setup: mutiroSetupAdapter,
+    setupWizard: mutiroSetupWizard,
+
+    // Messaging adapter: teaches OpenClaw how to recognize a Mutiro target.
+    // Without it, reactions/forwards/cross-channel sends fail with
+    // "Unknown target" because the core resolver can't match a
+    // `conv_<uuid>` conversation id or a leading-@ username against any
+    // directory/id pattern it knows about.
+    messaging: {
+      normalizeTarget: (raw: string) => {
+        const trimmed = raw.trim();
+        if (!trimmed) return undefined;
+        // Strip a leading @ on usernames so downstream comparisons and the
+        // bridge's `to_username` field see the raw handle.
+        return trimmed.startsWith("@") ? trimmed.slice(1) : trimmed;
+      },
+      targetResolver: {
+        hint: "Use a Mutiro conversation id (e.g. conv_<uuid>) or @username.",
+        looksLikeId: (raw: string, normalized?: string) => {
+          const value = (normalized ?? raw).trim();
+          if (!value) return false;
+          // conv_<...> = conversation id; bare @handle or a plain alphanumeric
+          // username both route to message.send_voice / react / etc.
+          return /^conv_/i.test(value) || /^@/.test(raw) || /^[A-Za-z0-9_.-]+$/.test(value);
+        },
+        resolveTarget: async ({ input, normalized }) => {
+          const value = (normalized || input).trim().replace(/^@/, "");
+          if (!value) return null;
+          const isConversation = /^conv_/i.test(value);
+          return {
+            to: value,
+            kind: isConversation ? "group" : "user",
+            display: isConversation ? value : `@${value}`,
+            source: "normalized",
+          };
+        },
+      },
+    },
+
+    // Gateway lifecycle: startAccount spawns the bridge subprocess for this
+    // account and wires inbound observed messages into OpenClaw's reply
+    // dispatcher. stopAccount tears the subprocess down.
+    gateway: {
+      async startAccount(ctx) {
+        const runtime = await loadMutiroChannelRuntime();
+        return runtime.startMutiroAccount(ctx);
+      },
+      async stopAccount(ctx) {
+        const runtime = await loadMutiroChannelRuntime();
+        await runtime.stopMutiroAccount(ctx);
+      },
+    },
+  },
+  outbound,
+});
