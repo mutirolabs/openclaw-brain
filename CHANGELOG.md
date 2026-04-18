@@ -36,6 +36,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   install scanner correctly flags `child_process` usage and requires the flag
   as explicit acknowledgement. Install instructions show the flag with a note
   telling users to verify the source before passing it.
+- `@sinclair/typebox` declared as a runtime dependency so OpenClaw's
+  `npm install --omit=dev` in the installed plugin directory picks it up;
+  without this, plugin registration fails with "Cannot find module
+  '@sinclair/typebox'" when loading `src/agent-tools.ts`.
 
 [Unreleased]: https://github.com/mutirolabs/openclaw-brain/compare/v0.1.0...HEAD
 [0.1.0]: https://github.com/mutirolabs/openclaw-brain/releases/tag/v0.1.0

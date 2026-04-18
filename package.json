@@ -36,6 +36,9 @@
   "engines": {
     "node": ">=22"
   },
+  "dependencies": {
+    "@sinclair/typebox": "^0.34.49"
+  },
   "peerDependencies": {
     "openclaw": ">=2026.4.10"
   },
