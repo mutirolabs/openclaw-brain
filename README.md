@@ -86,14 +86,15 @@ mutiro agents update-profile <agent-username> --badge lobster
 
 Paste this prompt into your AI assistant (Claude, Cursor, Windsurf, …):
 
-> Read https://mutiro.com/docs/guides/create-agent.md and help me create a Mutiro agent step by step. Use `--badge lobster` on `mutiro agents create` so the agent shows the OpenClaw badge.
+> Read https://mutiro.com/docs/guides/create-agent and help me create a Mutiro agent step by step. Use `--badge lobster` on `mutiro agents create` so the agent shows the OpenClaw badge.
 
-Or follow the [Mutiro create-agent guide](https://www.mutiro.com/docs/guides/create-agent.md) by hand.
+Or follow the [Mutiro create-agent guide](https://www.mutiro.com/docs/guides/create-agent) by hand.
 
 ## Resources
 
 - [Use OpenClaw as brain](./docs/guides/use-openclaw-as-brain.md)
 - [Manage the Mutiro allowlist](./docs/guides/manage-allowlist.md)
-- [Mutiro documentation](https://mutiro.com/docs)
+- [Mutiro manual](https://mutiro.com/docs/manual)
+- [Mutiro CLI reference](https://mutiro.com/docs/cli)
 - [OpenClaw documentation](https://openclaw.ai)
 - Sibling repo: [`pi-brain`](https://github.com/mutirolabs/pi-brain) — the Pi equivalent, a standalone bridge rather than an OpenClaw extension

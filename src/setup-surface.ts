@@ -26,7 +26,7 @@ import { listMutiroAccountIds, resolveMutiroAccount } from "./config.js";
 
 const channel = "mutiro" as const;
 const INSTALL_URL = "https://mutiro.com/downloads/install.sh";
-const CREATE_AGENT_GUIDE = "https://www.mutiro.com/docs/guides/create-agent.md";
+const CREATE_AGENT_GUIDE = "https://www.mutiro.com/docs/guides/create-agent";
 
 const MUTIRO_INTRO_LINES = [
   "Point OpenClaw at an existing Mutiro agent directory.",

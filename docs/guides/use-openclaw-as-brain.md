@@ -17,7 +17,7 @@ Walk me through this step by step. Be proactive — run commands, check outputs,
 
 This guide assumes I already have a working Mutiro agent directory. If I don't, stop and point me at the Mutiro create-agent guide first:
 
-> https://www.mutiro.com/docs/guides/create-agent.md
+> https://www.mutiro.com/docs/guides/create-agent
 
 Check what's already set up:
 
@@ -396,6 +396,6 @@ Help me review OpenClaw's `tools.profile` / `tools.alsoAllow` and the Mutiro `al
 **Docs:**
 - OpenClaw: https://openclaw.ai
 - Mutiro: https://mutiro.com
-- Create a Mutiro agent: https://www.mutiro.com/docs/guides/create-agent.md
+- Create a Mutiro agent: https://www.mutiro.com/docs/guides/create-agent
 - openclaw-brain repo: https://github.com/mutirolabs/openclaw-brain
 ````
