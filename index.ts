@@ -12,7 +12,7 @@ import { defineBundledChannelEntry } from "openclaw/plugin-sdk/channel-entry-con
 export default defineBundledChannelEntry({
   id: "mutiro",
   name: "Mutiro",
-  description: "Mutiro chatbridge channel plugin",
+  description: "The official Mutiro Channel extension for OpenClaw.",
   importMetaUrl: import.meta.url,
   plugin: {
     specifier: "./src/channel.js",

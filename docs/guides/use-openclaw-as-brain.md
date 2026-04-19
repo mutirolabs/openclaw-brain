@@ -1,11 +1,11 @@
 # Use OpenClaw as the Brain for Your Mutiro Agent
 
-Copy the prompt below into your AI assistant (Claude, Cursor, Windsurf, or similar) and it will walk you through pointing [OpenClaw](https://openclaw.ai) at a [Mutiro](https://mutiro.com) agent through `chatbridge`. Mutiro stays the messaging platform; OpenClaw becomes the brain.
+Copy the prompt below into your AI assistant (Claude, Cursor, Windsurf, or similar) and it will walk you through pointing [OpenClaw](https://openclaw.ai) at a [Mutiro](https://mutiro.com) agent via the Mutiro Channel extension. Mutiro stays the messaging platform; OpenClaw becomes the brain.
 
 ## The Prompt
 
 ````
-You are helping me run an existing Mutiro agent with OpenClaw as its brain over `chatbridge`. Mutiro keeps the agent identity, connectivity, messaging, auth, and media plumbing. OpenClaw becomes the thinking layer and drives outbound replies through the bridge.
+You are helping me run an existing Mutiro agent with OpenClaw as its brain, connected through the Mutiro Channel extension for OpenClaw. Mutiro keeps the agent identity, connectivity, messaging, auth, and media plumbing. OpenClaw becomes the thinking layer and drives outbound replies through the Mutiro Channel.
 
 Walk me through this step by step. Be proactive — run commands, check outputs, and make smart decisions based on what you find. Don't ask me things you can figure out by running a command. Only pause to ask when you genuinely need my input (like which LLM provider to use or what personality I want). When you need my input, ask me directly and wait for my response.
 
@@ -84,9 +84,9 @@ openclaw doctor
 
 ---
 
-### Step 4: Install the openclaw-brain Plugin
+### Step 4: Install the Mutiro Channel extension
 
-This plugin is the piece that lets OpenClaw speak Mutiro's `chatbridge`. It spawns `mutiro agent host --mode=bridge` as a subprocess and translates NDJSON envelopes into OpenClaw inbound messages and outbound send/react/forward/voice/card/forward calls.
+This extension is the piece that lets OpenClaw drive a Mutiro agent. It spawns `mutiro agent host --mode=bridge` as a subprocess and translates the Mutiro Channel protocol into OpenClaw inbound messages and outbound send/react/forward/voice/card calls.
 
 Install from the published package:
 
@@ -105,15 +105,15 @@ cd ~/src/openclaw-brain
 openclaw plugins install --dangerously-force-unsafe-install "file:$(pwd)"
 ```
 
-**About `--dangerously-force-unsafe-install`**: this plugin legitimately
-spawns `mutiro agent host --mode=bridge` as a subprocess — that is the
-entire `chatbridge` adapter. OpenClaw's install scanner correctly flags any
-plugin that uses `child_process` as sensitive and requires this flag as an
-explicit acknowledgement. Before you pass it, confirm you are installing
-from the signed [`mutirolabs/openclaw-brain`](https://github.com/mutirolabs/openclaw-brain)
+**About `--dangerously-force-unsafe-install`**: this extension legitimately
+spawns `mutiro agent host --mode=bridge` as a subprocess — that is how the
+Mutiro Channel carries traffic. OpenClaw's install scanner correctly flags
+any extension that uses `child_process` as sensitive and requires this flag
+as an explicit acknowledgement. Before you pass it, confirm you are
+installing from the signed [`mutirolabs/openclaw-brain`](https://github.com/mutirolabs/openclaw-brain)
 source (or the `@mutirolabs/openclaw-brain` npm package). Review the
 `spawn` call at [`src/bridge-client.ts`](https://github.com/mutirolabs/openclaw-brain/blob/main/src/bridge-client.ts)
-if you want to see exactly what the plugin executes.
+if you want to see exactly what the extension executes.
 
 Verify OpenClaw sees the channel:
 
@@ -320,9 +320,9 @@ Restart with `openclaw gateway run` after any config change.
 
 ### Step 12: Signals and Live Call Handoff
 
-OpenClaw's tool activity is forwarded to Mutiro as bridge signals, so Mutiro surfaces "thinking", "web searching", "recalling", "sending voice", etc. in real time while the agent works. The plugin maps 26 OpenClaw tool names to Mutiro `SignalType` enums; anything outside the map falls back to `SIGNAL_TYPE_CUSTOM` with a detail label.
+OpenClaw's tool activity is forwarded to Mutiro as channel signals, so Mutiro surfaces "thinking", "web searching", "recalling", "sending voice", etc. in real time while the agent works. The extension maps 26 OpenClaw tool names to Mutiro `SignalType` enums; anything outside the map falls back to `SIGNAL_TYPE_CUSTOM` with a detail label.
 
-For live voice calls, Mutiro sends `task.request` with a compact observed-turn payload and expects a plain-text result. The plugin handles this by accumulating the agent's reply text and returning it as `ChatBridgeTaskResult.text`. It also answers `session.snapshot` from recent messages cached per-conversation so Mutiro can bootstrap the live lane.
+For live voice calls, Mutiro sends `task.request` with a compact observed-turn payload and expects a plain-text result. The extension accumulates the agent's reply text and returns it as the task result. It also answers `session.snapshot` from recent messages cached per-conversation so Mutiro can bootstrap the live lane.
 
 Voice call **summaries** flow as normal `message.observed` envelopes tagged `live_call`. OpenClaw treats them as regular inbound turns — nothing extra to configure.
 

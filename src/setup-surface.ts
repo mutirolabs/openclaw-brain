@@ -167,7 +167,7 @@ export const mutiroSetupWizard: ChannelSetupWizard = {
     resolveExtraStatusLines: ({ cfg }) => [`Accounts: ${listMutiroAccountIds(cfg).length || 0}`],
   }),
   introNote: {
-    title: "Mutiro chatbridge setup",
+    title: "Mutiro Channel setup",
     lines: MUTIRO_INTRO_LINES,
   },
   prepare: async ({ prompter }) => {

@@ -15,9 +15,9 @@ Copy the prompt below into your AI assistant (Claude, Cursor, Windsurf, or simil
 
 ````
 You are helping me manage who can message my Mutiro agent. My agent is driven
-by OpenClaw over `chatbridge`, so there are two allowlists. The Mutiro backend
-allowlist is the authoritative gate — denied users are blocked at the server.
-The OpenClaw allowFrom is a second filter on top.
+by OpenClaw via the Mutiro Channel extension, so there are two allowlists.
+The Mutiro backend allowlist is the authoritative gate — denied users are
+blocked at the server. The OpenClaw `allowFrom` is a second filter on top.
 
 Be proactive — inspect current state before changing anything, and confirm
 destructive changes (especially `set` calls that replace the whole list).

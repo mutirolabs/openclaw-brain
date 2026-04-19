@@ -1,7 +1,7 @@
 {
   "name": "@mutirolabs/openclaw-brain",
-  "version": "0.1.1",
-  "description": "OpenClaw channel plugin that drives a Mutiro agent over chatbridge. OpenClaw becomes the brain; Mutiro stays the messaging surface.",
+  "version": "0.2.0",
+  "description": "The official Mutiro Channel extension for OpenClaw. OpenClaw is the brain; Mutiro is the messaging surface, identity, and state.",
   "type": "module",
   "license": "ISC",
   "repository": {
@@ -22,10 +22,9 @@
   },
   "keywords": [
     "mutiro",
-    "chatbridge",
     "openclaw",
     "channel",
-    "plugin",
+    "extension",
     "agent"
   ],
   "files": [
@@ -63,10 +62,10 @@
     "channel": {
       "id": "mutiro",
       "label": "Mutiro",
-      "selectionLabel": "Mutiro (plugin)",
+      "selectionLabel": "Mutiro",
       "docsPath": "/channels/mutiro",
       "docsLabel": "mutiro",
-      "blurb": "chatbridge channel; configure a Mutiro agent directory to enable.",
+      "blurb": "Official Mutiro Channel for OpenClaw. Point at a Mutiro agent directory to enable.",
       "order": 80,
       "quickstartAllowFrom": true
     },

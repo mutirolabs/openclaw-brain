@@ -71,10 +71,10 @@ export const mutiroPlugin: ChannelPlugin<ResolvedMutiroAccount> = createChatChan
     meta: {
       id: "mutiro",
       label: "Mutiro",
-      selectionLabel: "Mutiro (plugin)",
+      selectionLabel: "Mutiro",
       docsPath: "/channels/mutiro",
       docsLabel: "mutiro",
-      blurb: "chatbridge channel; configure a Mutiro agent directory to enable.",
+      blurb: "Official Mutiro Channel for OpenClaw. Point at a Mutiro agent directory to enable.",
       order: 80,
       quickstartAllowFrom: true,
       markdownCapable: true,
